@@ -1,0 +1,25 @@
+{
+  "name": "todo",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Thomas St Pierre <thomas.stpierre@neudesic.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/tstpierre/todo-gulp-demo",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.4.9",
+    "angular-bootstrap": "^1.1.2",
+    "angular-ui-router": "ui-router#^0.2.17",
+    "ngstorage": "^0.3.10"
+  }
+}
