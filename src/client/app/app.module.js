@@ -7,6 +7,7 @@
 
        // feature modules
        'app.templates',
-       'app.todo'
+       'app.todo',
+       'app.sync'
     ]);
 })();
