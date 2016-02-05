@@ -103,17 +103,23 @@ echo Handling node.js deployment.
 # 1. Select node version
 selectNodeVersion
 
-# 2. Install npm packages
-if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
-  cd "$DEPLOYMENT_SOURCE"
+# 2. KuduSync
+if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
+  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+  exitWithMessageOnError "Kudu Sync failed"
+fi
+
+# 3. Install npm packages
+if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
+  cd "$DEPLOYMENT_TARGET"
   eval $NPM_CMD install
   exitWithMessageOnError "npm failed"
   cd - > /dev/null
 fi
 
-# 3. Install bower packages
-if [ -e "$DEPLOYMENT_SOURCE/bower.json" ]; then
-  cd "$DEPLOYMENT_SOURCE"
+# 4. Install bower packages
+if [ -e "$DEPLOYMENT_TARGET/bower.json" ]; then
+  cd "$DEPLOYMENT_TARGET"
   eval $NPM_CMD install bower
   exitWithMessageOnError "installing bower failed"
   ./node_modules/.bin/bower install
@@ -121,9 +127,9 @@ if [ -e "$DEPLOYMENT_SOURCE/bower.json" ]; then
   cd - > /dev/null
 fi
 
-# 4. Build web client and update server static content
-if [ -e "$DEPLOYMENT_SOURCE/gulpfile.js" ]; then
-  cd "$DEPLOYMENT_SOURCE"
+# 5. Build web client and update server static content
+if [ -e "$DEPLOYMENT_TARGET/gulpfile.js" ]; then
+  cd "$DEPLOYMENT_TARGET"
   echo "Cleaning previous builds"
   ./node_modules/.bin/gulp clean
   exitWithMessageOnError "failed to clean previous builds"
@@ -131,12 +137,6 @@ if [ -e "$DEPLOYMENT_SOURCE/gulpfile.js" ]; then
   ./node_modules/.bin/gulp
   exitWithMessageOnError "gulp failed"
   cd - > /dev/null
-fi
-
-# 5. KuduSync
-if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-  exitWithMessageOnError "Kudu Sync failed"
 fi
 
 ##################################################################################################################################
