@@ -1,15 +1,21 @@
 <div class="todo">
     <h4>Todos</h4>
-    <form class="form-inline" ng-submit="vm.add()">
-        <div class="form-group">
-            <input class="form-control" type="text" ng-model="vm.todo" placeholder="task name..." required minlength="4" maxlength="140" />
-        </div>
-        <button class="btn btn-primary" type="submit">Add</button>
-    </form>
-    <ul class="todo-list">
-        <li ng-repeat="task in vm.tasks track by task.id">
-            {{ task.name }}
-            <a href="javascript:void(0);" ng-click="vm.finish(task.id)"><i class="glyphicon glyphicon-check"></i></a>
-        </li>
-    </ul>
+    <div class="col-md-4">
+        <form class="form-inline" ng-submit="vm.add()">
+            <div class="input-group">
+                <input class="form-control" type="text" ng-model="vm.todo" placeholder="task name..." required minlength="4" maxlength="140" />
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="task in vm.tasks track by task.id">
+                <span class="pull-right"><a href="javascript:void(0);" ng-click="vm.finish(task.id)"><i class="glyphicon glyphicon-check"></i></a></span>
+                {{ task.name }}
+            </li>
+        </ul>
+    </div>
 </div>
