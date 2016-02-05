@@ -129,6 +129,7 @@ gulp.task('build:bower', function () {
 
     // Copy them to another directory
     return gulp.src(bowerWithMin)
+        .pipe(plugs.concat('vendor.min.js'))
         .pipe(gulp.dest(paths.out.lib));
 });
 
